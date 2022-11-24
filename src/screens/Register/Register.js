@@ -30,6 +30,12 @@ class Register extends Component {
                 username: username,
                 biography: biography,
                 createdAt: Date.now()
+            }),
+            this.setState({
+              email: email,
+              password: password,
+              username: username,
+              biography: biography
             })
         )
     })
@@ -79,10 +85,16 @@ class Register extends Component {
           onChangeText={ text => this.setState({biography: text})}
           value={this.state.biography}
         />
-
-        <TouchableOpacity onPress={() => this.SignIn(this.state.username, this.state.email, this.state.password, this.state.biography)}>
-          <Text style={styles.signInButton}>Sign In</Text>
-        </TouchableOpacity>
+        {
+          this.state.email === '' || this.state.password === '' || this.state.username === '' ?
+          <TouchableOpacity>
+            <Text style={styles.greySignInButton}>Sign Up</Text>
+          </TouchableOpacity>
+          :
+          <TouchableOpacity onPress={() => this.SignIn(this.state.username, this.state.email, this.state.password, this.state.biography)}>
+            <Text style={styles.signInButton}>Sign Up</Text>
+          </TouchableOpacity>
+        }
         <TouchableOpacity onPress={() => this.props.navigation.navigate('Login')}>
         <Text style={styles.goToRegister}>Already got an account?</Text>
         </TouchableOpacity>
@@ -137,6 +149,15 @@ const styles = StyleSheet.create({
     paddingVertical: 3,
     marginTop: 50,
     fontSize: 16,
+  },
+  greySignInButton: {
+    color: '#d7d7d7',
+    backgroundColor: '#A0A0A0',
+    borderRadius: 50,
+    fontSize: 26,
+    paddingHorizontal: 25,
+    paddingVertical: 2,
+    marginTop: 20,
   }
 })
 

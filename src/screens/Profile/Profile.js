@@ -36,6 +36,7 @@ class Profile extends Component {
     this.props.navigation.navigate('Login')
   }
 
+
   render() {
     return (
       <View>
@@ -56,7 +57,7 @@ class Profile extends Component {
           <FlatList 
           data={this.state.allPosts}
           keyExtractor={item => item.id.toString()}
-          renderItem={ ({item}) => <Post navigation={this.props.navigation} id={item.id} data={item.data} />}
+          renderItem={ ({item}) => <Post navigation={this.props.navigation} id={item.id} data={item.data} deletePost={(() => this.deletePosts())} />}
           />
           :
           <Text>This user hasn't posted anything.</Text>
