@@ -1,68 +1,90 @@
 import React, { Component } from 'react';
+import {Text, View, StyleSheet, TouchableOpacity, TextInput } from 'react-native';
+import { auth, db } from '../../firebase/config';
 
-import { Text, View, TouchableOpacity, TextInput, StyleSheet} from 'react-native'
-import { auth, db } from '../../firebase/config' 
+
 
 class Register extends Component {
   constructor(props){
-    super(props)
-    this.state = {
+    super(props);
 
+    this.state = {
+      email: '',
+      password: '',
+      username: '',
+      biography: ''
     }
   }
-
-  Register(email, user, pass, minibio){
-    auth.createUserWithEmailAndPassword(email, pass)
-    .then( () =>{
-      db.collection('usuarios').add({
-        email: email,
-        user: user,
-        password: pass,
-        minibio: minibio,
-        createdAt: Date.now(),
-      })}
-    ).then( (res) =>{
-      this.props.navigation.navigate('Home')
-    }).catch(err => console.log(err))
+  componentDidMount(){
+    auth.onAuthStateChanged( user => {
+      console.log(user)
+    })
   }
+
+  SignIn(username, email, password, biography){
+    auth.createUserWithEmailAndPassword(email, password)
+    .then(()=> {
+        return(
+            db.collection('users').add({
+                email: email,
+                username: username,
+                biography: biography,
+                createdAt: Date.now()
+            })
+        )
+    })
+    .then( () => {
+      this.props.navigation.navigate('TabNavigation')
+    })
+    .catch(error => console.log(error))      
+}
+
+
+
   render() {
     return (
       <View style={styles.container}>
-          <Text style={styles.fieldName}>Registrate!</Text>
-         <Text style={styles.fieldName}>Email</Text>
-        <TextInput style={styles.infoInput}
-        keyboardType='email-address'
-        placeholder='email'
-        onChangeText={ text => this.setState({email: text}) }
-        value={this.state.email}
+        <Text style={styles.FormTitle}>Sign up!</Text>
+
+        <Text style={styles.fieldName}>email</Text>
+        <TextInput 
+          style={styles.fieldInput}
+          keyboardType='email-address'
+          placeholder='email'
+          onChangeText={ text => this.setState({email: text})}
+          value={this.state.email}
         />
-        <Text style={styles.fieldName}>Usuario</Text>
-        <TextInput style={styles.infoInput}
-        keyboardType='default'
-        placeholder='usuario'
-        onChangeText={ text => this.setState({userName: text}) }
-        value={this.state.userName}
-        />
+
         <Text style={styles.fieldName}>Password</Text>
-        <TextInput style={styles.infoInput}
-        keyboardType='default'
-        placeholder='password'
-        onChangeText={ text => this.setState({password: text}) }
-        value={this.state.password}
+        <TextInput 
+          style={styles.fieldInput}
+          keyboardType='default'
+          placeholder='password'
+          onChangeText={ text => this.setState({password: text})}
+          value={this.state.password}
         />
-        <Text style={styles.fieldName}>Mini Bio</Text>
-        <TextInput style={styles.infoInput}
-        keyboardType='default'
-        placeholder='mini bio'
-        onChangeText={ text => this.setState({bio: text}) }
-        value={this.state.bio}
+        <Text style={styles.fieldName}>Username</Text>
+        <TextInput 
+          style={styles.fieldInput}
+          keyboardType='default'
+          placeholder='username'
+          onChangeText={ text => this.setState({username: text})}
+          value={this.state.username}
         />
-        <TouchableOpacity style={styles.button} onPress={() => this.Register(this.state.email, this.state.userName, this.state.password, this.state.bio)}>
-          <Text style={styles.buttonName}>Aceptar</Text>
+        <Text style={styles.fieldName}>Biography</Text>
+        <TextInput 
+          style={styles.fieldInput}
+          keyboardType='default'
+          placeholder='biography'
+          onChangeText={ text => this.setState({biography: text})}
+          value={this.state.biography}
+        />
+
+        <TouchableOpacity onPress={() => this.SignIn(this.state.username, this.state.email, this.state.password, this.state.biography)}>
+          <Text style={styles.signInButton}>Sign In</Text>
         </TouchableOpacity>
-        <Text style={styles.fieldName}>Ya tienes Cuenta</Text>
-        <TouchableOpacity onPress={ () => {this.props.navigation.navigate('Login')}}>
-          <Text style={styles.fieldName}>Logueate</Text>
+        <TouchableOpacity onPress={() => this.props.navigation.navigate('Login')}>
+        <Text style={styles.goToRegister}>Already got an account?</Text>
         </TouchableOpacity>
       </View>
     );
@@ -71,33 +93,50 @@ class Register extends Component {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: '#031926',
+    height: 600,
+    backgroundColor: '#edf2fa',
     display: 'flex',
     alignItems:'center',
     justifyContent: 'center',
-    height: 550,
+  },
+  FormTitle: {
+    fontSize: 45,
+    color: '#95b8d1'
+  },
+  fieldInput: {
+    margin: 10, 
+    color: '#ccdbfd',
+    fontSize: 16,
+    backgroundColor: '#809bce',
+    borderRadius: 50,
+    paddingHorizontal: 10,
+    paddingVertical: 5,
   },
   fieldName:{
-    marginTop: 10, 
-    color: '#9DBEBB',
-    fontSize: 16,
-
-  },
-  infoInput: {
-    backgroundColor: '#468189',
-    width: 200,
+    fontSize: 20,
+    color: '#74a892',
+    paddingHorizontal: 20,
+    paddingVertical: 2,
+    margin: 10,
     borderRadius: 50,
-    padding: 'offset'
   },
-  button: {
-    width: 75,
-    marginTop: 20, 
-    backgroundColor: '#77ACA2',
-    borderRadius: 25,
+  signInButton: {
+    color: '#d7e3fc',
+    backgroundColor: '#809bce',
+    borderRadius: 50,
+    fontSize: 26,
+    paddingHorizontal: 25,
+    paddingVertical: 2,
+    marginTop: 20,
   },
-  buttonName: {
-    color: '#468189',
-    textAlign: 'center',
+  goToRegister: {
+    color:  '#d7e3fc',
+    backgroundColor: '#809bce',
+    borderRadius: 50,
+    paddingHorizontal: 10,
+    paddingVertical: 3,
+    marginTop: 50,
+    fontSize: 16,
   }
 })
 

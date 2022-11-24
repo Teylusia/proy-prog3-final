@@ -1,34 +1,40 @@
-import {FontAwesome} from '@expo/vector-icons'
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
+import React from 'react';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { FontAwesome } from '@expo/vector-icons';
 
-const Tab = createBottomTabNavigator()
+const Tab = createBottomTabNavigator();
 
 import HomeNavigation from './HomeNavigation';
 import Profile from '../screens/Profile/Profile';
-import Posts from '../screens/Posts/Posts';
+import NewPost from '../screens/NewPost/NewPost';
 
 function TabNavigation(){
   return (
     <Tab.Navigator>
-        <Tab.Screen 
-        name='TabHome' 
-        component={HomeNavigation}
-        options={{
-            tabBarIcon: () => <FontAwesome name='home' size={16} color='blue' />,
-            headerShown:false
-        }}
-        />
-        <Tab.Screen
-        name='Perfil'
-        component={Profile}
-        options={{
-            tabBarIcon: () => <FontAwesome name='music' size={16} color='blue' />
-        }}
-        />
-        <Tab.Screen
-        name='NewPost'
-        component={Posts}
-        />
+      <Tab.Screen 
+      name='Home Navigation'
+      component={HomeNavigation}
+      options={{
+        headerShown: false,
+        tabBarIcon: () => <FontAwesome name='home' size={16} color='#809bce' />
+      }}
+      />
+      <Tab.Screen 
+      name='Profile'
+      component={Profile}
+      options={{
+        headerShown: false,
+        tabBarIcon: () => <FontAwesome name='user' size={16} color='#809bce' />
+      }}
+      />
+      <Tab.Screen 
+      name='New Post'
+      component={NewPost}
+      options={{
+        headerShown: false,
+        tabBarIcon: () => <FontAwesome name='plus' size={16} color='#809bce' />
+      }}
+      />
     </Tab.Navigator>
   );
 }
