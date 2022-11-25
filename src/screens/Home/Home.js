@@ -4,6 +4,7 @@ import { FontAwesome } from '@expo/vector-icons';
 import { db } from '../../firebase/config'
 
 import Post from '../../components/Post/Post';
+import SearchResult from '../../components/SearchResult/SearchResult';
 
 class Home extends Component {
   constructor(props){
@@ -11,7 +12,9 @@ class Home extends Component {
     this.state = {
       allPosts: [],
       users: [],
-      search: ''
+      search: '',
+      allUsers: [],
+      msg: '',
     }
   }
 
@@ -33,10 +36,8 @@ class Home extends Component {
         allPosts: posts
       })
     })
-  }
-  searchFunction(search){
+
     db.collection('users')
-    .where('username', '==', search)
     .onSnapshot( docs =>{
       let users = []
       docs.forEach( doc =>{
@@ -47,9 +48,30 @@ class Home extends Component {
       })
       console.log(users);
       this.setState({
-        users: users
+        allUsers: users
       })
     })
+  }
+  searchFunction(search){
+
+
+    let filteringResults = this.state.allUsers.filter( user => {
+      if(user.data.email.toLowerCase().includes(search)){
+        return user
+      }
+    })
+
+    if(filteringResults.length > 0){
+      this.setState({
+        users: filteringResults
+      })
+    }else{
+      this.setState({
+        msg: 'No hay usuarios con ese email',
+        users: []
+      })
+    }
+    console.log(this.state.users.length);
   }
 
   render() {
@@ -63,16 +85,20 @@ class Home extends Component {
         onChangeText={ text => this.setState({search: text})}
         value={this.state.password}
         />
+
         <TouchableOpacity onPress={ () => this.searchFunction(this.state.search)}>
           <FontAwesome name='search'  size={16} color='grey' />
         </TouchableOpacity>
+        
         {
-          this.state.users.length > 0? 
-          <TouchableOpacity onPress={() => this.props.navigation.navigate('ProfileFriends')}>
-            <Text>{this.state.users[0].email}</Text>
-          </TouchableOpacity>
+          this.state.users.length > 0 ? 
+          <FlatList 
+          data={this.state.users}
+          keyExtractor={item => item.id.toString()}
+          renderItem={({item}) => { <SearchResult id={item.id} navigation={this.props.navigation} data={item.data} />}}
+          />
           :
-          <></>
+          <Text>{this.state.msg}</Text>
         }
       </View>
         <FlatList

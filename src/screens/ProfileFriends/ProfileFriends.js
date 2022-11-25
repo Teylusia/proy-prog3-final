@@ -54,13 +54,13 @@ class Profile extends Component {
         {
           this.state.userInfo.length > 0 ?
           <View> 
-        <Text>{this.state.userInfo[0].username}</Text>
-        <Text>{this.state.userInfo[0].email}</Text>
+        <Text style={styles.username}>{this.state.userInfo[0].username}</Text>
+        <Text style={styles.email}>{this.state.userInfo[0].email}</Text>
         {
           this.state.userInfo[0].biography ?
-          <Text>{this.state.userInfo[0].biography}</Text>
+          <Text style={styles.description}>{this.state.userInfo[0].biography}</Text>
           :
-          <Text>This user doesn't have a description</Text>
+          <Text style={styles.description}>This user doesn't have a description</Text>
         }
         <Text>this user has {this.state.allPosts.length} posts</Text>
         {
@@ -83,5 +83,38 @@ class Profile extends Component {
     );
   }
 }
+
+const styles = StyleSheet.create({
+  container: {
+
+  },
+  email: {
+    textAlign: 'center',
+    color: '#d7e3fc',
+    backgroundColor: '#809bce',
+    fontSize: 16,
+  },
+  username: {
+    textAlign: 'center',
+    color: '#d7e3fc',
+    backgroundColor: '#809bce',
+    fontSize: 16,
+  },
+  description: {
+    textAlign: 'center',
+    color: '#d7e3fc',
+    backgroundColor: '#809bce',
+    fontSize: 16,
+  },
+  signOut:{
+    color: '#d7e3fc',
+    backgroundColor: '#809bce',
+    borderRadius: 50,
+    fontSize: 26,
+    paddingHorizontal: 25,
+    paddingVertical: 2,
+    marginTop: 20,
+  }
+})
 
 export default Profile;

@@ -40,17 +40,17 @@ class Profile extends Component {
   render() {
     return (
       <View>
-        <Text>{auth.currentUser.username}</Text>
-        <Text>{auth.currentUser.email}</Text>
+        <Text style={styles.username}>{auth.currentUser.username}</Text>
+        <Text style={styles.email}>{auth.currentUser.email}</Text>
         {
           auth.currentUser.biography ?
-          <Text>{auth.currentUser.biography}</Text>
+          <Text style={styles.description}>{auth.currentUser.biography}</Text>
           :
-          <Text>This user doesn't have a description</Text>
+          <Text style={styles.description}>This user doesn't have a description</Text>
         }
-        <Text>this user has {this.state.allPosts.length} posts</Text>
+        <Text style={styles.description}>this user has {this.state.allPosts.length} posts</Text>
         <TouchableOpacity onPress={() => this.signOut()}>
-          <Text>Sign Out</Text>
+          <Text style={styles.signOut}>Sign Out</Text>
         </TouchableOpacity>
         {
           this.state.allPosts.length > 0 ?
@@ -68,4 +68,36 @@ class Profile extends Component {
   }
 }
 
+const styles = StyleSheet.create({
+  container: {
+
+  },
+  email: {
+    textAlign: 'center',
+    color: '#d7e3fc',
+    backgroundColor: '#809bce',
+    fontSize: 16,
+  },
+  username: {
+    textAlign: 'center',
+    color: '#d7e3fc',
+    backgroundColor: '#809bce',
+    fontSize: 16,
+  },
+  description: {
+    textAlign: 'center',
+    color: '#d7e3fc',
+    backgroundColor: '#809bce',
+    fontSize: 16,
+  },
+  signOut:{
+    color: '#d7e3fc',
+    backgroundColor: '#809bce',
+    borderRadius: 50,
+    fontSize: 26,
+    paddingHorizontal: 25,
+    paddingVertical: 2,
+    marginTop: 20,
+  }
+})
 export default Profile;
